@@ -1,0 +1,8 @@
+LICENSE
+setup.py
+mymath/__init__.py
+mymath.egg-info/PKG-INFO
+mymath.egg-info/SOURCES.txt
+mymath.egg-info/dependency_links.txt
+mymath.egg-info/requires.txt
+mymath.egg-info/top_level.txt
