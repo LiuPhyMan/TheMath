@@ -1,6 +1,10 @@
 LICENSE
 setup.py
 mymath/__init__.py
+mymath/pointArray.py
+mymath/ray.py
+mymath/vector.py
+mymath/volume.py
 mymath.egg-info/PKG-INFO
 mymath.egg-info/SOURCES.txt
 mymath.egg-info/dependency_links.txt
