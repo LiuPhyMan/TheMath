@@ -1,6 +1,7 @@
 LICENSE
 setup.py
 mymath/__init__.py
+mymath/field.py
 mymath/pointArray.py
 mymath/ray.py
 mymath/vector.py

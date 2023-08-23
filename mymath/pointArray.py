@@ -13,12 +13,13 @@ from .volume import AbsVol
 
 # =============================================================================================== #
 class PointArrays(object):
+    __slots__ = ["pointList", "nPoints"]
 
     def __init__(self, *, pointList: list):
         self.pointList = pointList
         self.nPoints = len(self.pointList)
 
-    def topo_in_vol(self, *, vol: AbsVol):
+    def topo_in_vol(self, *, vol: AbsVol) -> list:
         tmp = []
         for _point in self.pointList:
             tmp.append(vol.isPointIn(_point))
@@ -28,6 +29,7 @@ class PointArrays(object):
 # =============================================================================================== #
 # =============================================================================================== #
 class XZPlanePointMatrix(PointArrays):
+    __slots__ = ["dS"]
 
     def __init__(self, *, xRange: tuple, zRange: tuple, nXGrid: int, nZGrid: int, Y: float):
         assert (xRange[0] < xRange[1]) and (zRange[0] < zRange[1])
