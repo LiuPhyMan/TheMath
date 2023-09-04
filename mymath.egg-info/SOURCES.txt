@@ -1,7 +1,9 @@
 LICENSE
 setup.py
 mymath/__init__.py
+mymath/basic.py
 mymath/field.py
+mymath/plane.py
 mymath/pointArray.py
 mymath/ray.py
 mymath/vector.py

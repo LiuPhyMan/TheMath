@@ -4,7 +4,8 @@
 @contact: liu.jinbao@outlook.com
 @time: 02.July.2023
 """
-from math import pi, cos, factorial
+from math import pi, sin, cos, factorial, log, sqrt
+
 import numpy as np
 
 
@@ -17,6 +18,11 @@ def integrate_by_DCT(f, N):
         a.append(temp*2/N)
     coef = [1] + [2/(1 - 4*k**2) for k in range(1, int(N/2))] + [1/(1 - N**2)]
     return np.dot(a, coef)
+
+
+def Gauss2D(r, z, r_fwhm, z_fwhm, _min, _max):
+    cst1 = 4*log(2)
+    return _min + (_max - _min)*np.exp(-cst1*(r/r_fwhm)**2 - cst1*(z/z_fwhm)**2)
 
 
 def ls_index(l, s):

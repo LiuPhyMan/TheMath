@@ -33,6 +33,9 @@ class CylinderVol(AbsVol):
         else:
             return False
 
+    def __repr__(self):
+        return f"rMax: {self.rMax} \t zRange: {self.zRange}"
+
 
 class BoxVolume(AbsVol):
 

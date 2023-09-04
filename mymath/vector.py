@@ -10,7 +10,7 @@ from math import sqrt, cos, sin
 
 class CartVector(object):
 
-    def __init__(self, *, xyz: tuple) -> None:
+    def __init__(self, *, xyz: tuple[float]) -> None:
         self.x, self.y, self.z = xyz
 
     def unit_vector(self):
@@ -39,14 +39,31 @@ class CartVector(object):
 
 class CylinderVector(CartVector):
 
-    def __init__(self, *, rhoPhiZ: tuple) -> None:
+    def __init__(self, *, rhoPhiZ: tuple[float]) -> None:
         self.rho, self.phi, self.z = rhoPhiZ
         super().__init__(xyz=(self.rho*cos(self.phi), self.rho*sin(self.phi), self.z))
 
 
 class SphereVector(CartVector):
 
-    def __init__(self, *, rThetaPhi: tuple) -> None:
+    def __init__(self, *, rThetaPhi: tuple[float]) -> None:
         self.r, self.theta, self.phi = rThetaPhi
         super().__init__(xyz=(self.r*sin(self.theta)*cos(self.phi),
                               self.r*sin(self.theta)*sin(self.phi), self.r*cos(self.theta)))
+
+
+class UnitSphereVector(SphereVector):
+
+    def __init__(self, *, thetaPhi: tuple[float]) -> None:
+        theta, phi = thetaPhi
+        super().__init__(rThetaPhi=(1, theta, phi))
+
+
+default_vectors = {
+    "orig": CartVector(xyz=(0, 0, 0)),
+    "xPos": CartVector(xyz=(1, 0, 0)),
+    "xNeg": CartVector(xyz=(-1, 0, 0)),
+    "yPos": CartVector(xyz=(0, 1, 0)),
+    "yNeg": CartVector(xyz=(0, -1, 0)),
+    "zPos": CartVector(xyz=(0, 0, 1)),
+    "zNeg": CartVector(xyz=(0, 0, -1))}
