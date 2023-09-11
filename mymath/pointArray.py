@@ -29,6 +29,10 @@ class PointArrays(object):
     def __getitem__(self, item: int):
         return self.pointList[item]
 
+    def move_along_vector(self, *, offset_vec: CartVector) -> PointArrays:
+        pointList = [_p + offset_vec for _p in self.pointList]
+        return PointArrays(pointList=pointList)
+        
     def topo_in_vol(self, *, vol: AbsVol) -> list:
         r"""
         Returns
