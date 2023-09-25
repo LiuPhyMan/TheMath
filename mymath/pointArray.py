@@ -29,10 +29,6 @@ class PointArrays(object):
     def __getitem__(self, item: int):
         return self.pointList[item]
 
-    def move_along_vector(self, *, offset_vec: CartVector) -> PointArrays:
-        pointList = [_p + offset_vec for _p in self.pointList]
-        return PointArrays(pointList=pointList)
-        
     def topo_in_vol(self, *, vol: AbsVol) -> list:
         r"""
         Returns
@@ -69,3 +65,9 @@ class XZPlanePointMatrix(PointArrays):
             points.append(CartVector(xyz=(xx[_i], Y, zz[_i])))
         super().__init__(pointList=points)
         self.dS = (xRange[1] - xRange[0])/nXGrid*(zRange[1] - zRange[0])/nZGrid
+
+
+def move_point_arrays(_arrays: PointArrays, *, offset_vec: CartVector) -> PointArrays:
+    pointList = [_p + offset_vec for _p in _arrays.pointList]
+    return PointArrays(pointList=pointList)
+        
