@@ -7,7 +7,9 @@
 
 from math import sqrt, cos, sin
 
-
+# =============================================================================================== #
+#   A point could be defined by a vector that starts from the origin.
+# ----------------------------------------------------------------------------------------------- #
 class CartVector(object):
 
     def __init__(self, *, xyz: tuple[float]) -> None:
