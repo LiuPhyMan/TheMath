@@ -75,3 +75,10 @@ def voigt(dx, *, fwhm_G, fwhm_L):
         return gamma/pi/(dx**2 + gamma**2)
     z = (dx + 1j*gamma)/sigma/sqrt(2)
     return wofz(z).real/sigma/sqrt(2*pi)
+
+
+def Kn(n):
+    if n <= 3:
+        return 1
+    else:
+        return 16/3*(n/(n + 1))**2*(n + 7/6)/(n**2 + n + 0.5)
