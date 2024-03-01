@@ -1,9 +1,11 @@
 cdef class CartVector:
   cdef public double x, y, z
-  # cpdef double length(self)
   cpdef dotPrdt(self, CartVector vec)
   cpdef crsPrdt(self, CartVector vec)
   cpdef CartVector unit_vector(self)
+  cpdef rotByX(self, double angle)
+  cpdef rotByY(self, double angle)
+  cpdef rotByZ(self, double angle)
 
 cdef class CylinderVector(CartVector):
   cdef public double rho, phi
@@ -12,4 +14,21 @@ cdef class SphereVector(CartVector):
   cdef public double r, theta, phi
 
 cdef class UnitSphereVector(SphereVector):
+  pass
+
+cdef class PointArray:
+  cdef public double[:] x
+  cdef public double[:] y
+  cdef public double[:] z
+  cdef public double[:] rho
+
+cdef class RayGrid(PointArray):
+  cdef public PointArray node
+  cdef public PointArray cntr
+  cdef public double[:] ds
+
+cdef class UniformRayGrid(RayGrid):
+  pass
+
+cdef class NonUniformRayGrid(RayGrid):
   pass

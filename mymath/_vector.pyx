@@ -1,4 +1,5 @@
 from libc.math cimport sqrt, cos, sin
+import numpy as np
 
 # @functools.total_ordering
 cdef class CartVector:
@@ -78,3 +79,39 @@ cdef class SphereVector(CartVector):
 cdef class UnitSphereVector(SphereVector):
   def __init__(self, double theta, double phi):
     super().__init__(1, theta, phi)
+
+
+cdef class PointArray:
+
+  def __init__(self, double[:] x_seq, double[:] y_seq, double[:] z_seq):
+    self.x = x_seq
+    self.y = y_seq
+    self.z = z_seq
+    self.rho = np.sqrt(np.asarray(self.x)**2 + np.asarray(self.y)**2)
+
+
+cdef class RayGrid:
+
+  def __init__(self, PointArray node):
+    self.node = node
+    self.cntr = PointArray(np.add(self.node.x[:-1], self.node.x[1:])/2,
+                           np.add(self.node.y[:-1], self.node.y[1:])/2,
+                           np.add(self.node.z[:-1], self.node.z[1:])/2)
+
+
+cdef class UniformRayGrid(RayGrid):
+
+  def __init__(self, CartVector origin, CartVector termin, int nGrid):
+    super().__init__(PointArray(np.linspace(origin.x, termin.x, nGrid+1),
+                                np.linspace(origin.y, termin.y, nGrid+1),
+                                np.linspace(origin.z, termin.z, nGrid+1)))
+    self.ds = np.ones(nGrid) * (origin-termin).length/nGrid
+
+
+cdef class NonUniformRayGrid(RayGrid):
+
+  def __init__(self, CartVector origin, CartVector termin, double[:] normGrid):
+    super().__init__(PointArray(origin.x+np.asarray(normGrid)*(termin.x-origin.x),
+                                origin.y+np.asarray(normGrid)*(termin.y-origin.y),
+                                origin.z+np.asarray(normGrid)*(termin.z-origin.z)))
+    self.ds = np.subtract(normGrid[1:], normGrid[:-1])*(termin-origin).length

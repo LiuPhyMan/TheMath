@@ -21,5 +21,5 @@ cdef class SphereVol:
     # else:
     #   return False
 
-# cpdef crsPoint(Ray ray, SphereVol vol):
+# cdef crossPoint(Ray ray, SphereVol vol):
 #   return Vec(1, 2, 3)
