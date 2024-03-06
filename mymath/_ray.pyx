@@ -37,6 +37,13 @@ cdef class LightRay(Ray):
     self.optThick = 0.
     self.thinIend = 0.
 
+cdef double beta_factor(double x):
+  assert x >= 0
+  if x < 1e-3:
+    return 1-x/2
+  else:
+    return (1-exp(-x))/x
+
 cpdef double solveRTE(double[:] kappa, double[:] emiss, double[:] ds):
   r""" RTE: dI/ds = j - kappa*I 
     Returns I at end."""
@@ -45,15 +52,11 @@ cpdef double solveRTE(double[:] kappa, double[:] emiss, double[:] ds):
   assert ds.size == N
   cdef double Iend = 0
   cdef double tmp = 0
-  cdef Py_ssize_t i, j
+  cdef Py_ssize_t i
 
-  j = N-1
-  tmp = kappa[j]*(0.5*ds[j])
-  Iend += emiss[j] *ds[j] * exp(-tmp)
-  for i in range(1, N):
-    j = N-1-i
-    tmp = tmp + 0.5*(kappa[j]*ds[j]+kappa[j+1]*ds[j+1])
-    Iend += emiss[j]*ds[j]*exp(-tmp)
+  for i in range(N):
+    Iend = Iend*exp(-kappa[i]*ds[i])  + \
+           emiss[i]*ds[i]*beta_factor(kappa[i]*ds[i])
   return Iend
 
 cpdef double getThinIend(double[:] emiss, double[:] ds):

@@ -55,5 +55,8 @@ class polarGrid(object):
 def nonuniform_grid_from_data(nGrid, x_data, y_data):
   cumsum = cumtrapz(np.abs(np.gradient(y_data, x_data, edge_order=2)),
                     initial=0)
-  cumsum /= cumsum[-1]
-  return np.interp(np.linspace(0, 1, nGrid), cumsum, x_data)
+  if cumsum[-1] == 0:
+    return np.linspace(x_data[0], x_data[-1], num=nGrid)
+  else:
+    cumsum /= cumsum[-1]
+    return np.interp(np.linspace(0, 1, nGrid), cumsum, x_data)

@@ -1,4 +1,4 @@
-from libc.math cimport sqrt, cos, sin
+from libc.math cimport sqrt, cos, sin, abs
 import numpy as np
 
 # @functools.total_ordering
@@ -29,16 +29,25 @@ cdef class CartVector:
                       self.x*vec.y - self.y*vec.x)
 
   cpdef rotByX(self, double angle):
-    self.y = cos(angle)*self.y - sin(angle)*self.z
-    self.z = sin(angle)*self.y + cos(angle)*self.z
+    cdef double _y, _z
+    _y = cos(angle)*self.y - sin(angle)*self.z
+    _z = sin(angle)*self.y + cos(angle)*self.z
+    self.y = _y
+    self.z = _z
 
   cpdef rotByY(self, double angle):
-    self.x = cos(angle)*self.x + sin(angle)*self.z
-    self.z = -sin(angle)*self.x + cos(angle)*self.z
+    cdef double _x, _z
+    _x = cos(angle)*self.x + sin(angle)*self.z
+    _z = -sin(angle)*self.x + cos(angle)*self.z
+    self.x = _x
+    self.z = _z
 
   cpdef rotByZ(self, double angle):
-    self.x = cos(angle)*self.x - sin(angle)*self.y
-    self.y = sin(angle)*self.x + cos(angle)*self.y
+    cdef double _x, _y
+    _x = cos(angle)*self.x - sin(angle)*self.y
+    _y = sin(angle)*self.x + cos(angle)*self.y
+    self.x = _x
+    self.y = _y
 
   def __add__(self, CartVector other):
     return CartVector(self.x + other.x, self.y + other.y, self.z + other.z)
@@ -50,9 +59,9 @@ cdef class CartVector:
     return CartVector(self.x - other.x, self.y - other.y, self.z - other.z)
 
   def __repr__(self):
-    x_str = f"{self.x:.2f}" if self.x >= 0.1 else f"{self.x:.2e}"
-    y_str = f"{self.y:.2f}" if self.y >= 0.1 else f"{self.y:.2e}"
-    z_str = f"{self.z:.2f}" if self.z >= 0.1 else f"{self.z:.2e}"
+    x_str = f"{self.x:.2f}" if abs(self.x) >= 0.1 else f"{self.x:.2e}"
+    y_str = f"{self.y:.2f}" if abs(self.y) >= 0.1 else f"{self.y:.2e}"
+    z_str = f"{self.z:.2f}" if abs(self.z) >= 0.1 else f"{self.z:.2e}"
     return f"x-y-z: ({x_str}, {y_str}, {z_str})"
 
 # =========================================================================== #
@@ -81,37 +90,7 @@ cdef class UnitSphereVector(SphereVector):
     super().__init__(1, theta, phi)
 
 
-cdef class PointArray:
-
-  def __init__(self, double[:] x_seq, double[:] y_seq, double[:] z_seq):
-    self.x = x_seq
-    self.y = y_seq
-    self.z = z_seq
-    self.rho = np.sqrt(np.asarray(self.x)**2 + np.asarray(self.y)**2)
 
 
-cdef class RayGrid:
-
-  def __init__(self, PointArray node):
-    self.node = node
-    self.cntr = PointArray(np.add(self.node.x[:-1], self.node.x[1:])/2,
-                           np.add(self.node.y[:-1], self.node.y[1:])/2,
-                           np.add(self.node.z[:-1], self.node.z[1:])/2)
 
 
-cdef class UniformRayGrid(RayGrid):
-
-  def __init__(self, CartVector origin, CartVector termin, int nGrid):
-    super().__init__(PointArray(np.linspace(origin.x, termin.x, nGrid+1),
-                                np.linspace(origin.y, termin.y, nGrid+1),
-                                np.linspace(origin.z, termin.z, nGrid+1)))
-    self.ds = np.ones(nGrid) * (origin-termin).length/nGrid
-
-
-cdef class NonUniformRayGrid(RayGrid):
-
-  def __init__(self, CartVector origin, CartVector termin, double[:] normGrid):
-    super().__init__(PointArray(origin.x+np.asarray(normGrid)*(termin.x-origin.x),
-                                origin.y+np.asarray(normGrid)*(termin.y-origin.y),
-                                origin.z+np.asarray(normGrid)*(termin.z-origin.z)))
-    self.ds = np.subtract(normGrid[1:], normGrid[:-1])*(termin-origin).length
