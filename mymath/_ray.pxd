@@ -8,6 +8,10 @@ cdef class Ray:
   cpdef rotByX(self, double angle)
   #   pass
 
+cdef class Rays:
+  cdef public list rays
+  cdef public int nRay
+
 cdef class LightRay(Ray):
   cdef public double Iend
   cdef public double thinIend

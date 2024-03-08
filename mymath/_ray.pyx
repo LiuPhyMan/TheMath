@@ -1,3 +1,4 @@
+from cython.parallel import prange
 from libc.math cimport exp
 from ._vector cimport CartVector as Vector
 
@@ -28,6 +29,20 @@ cdef class Ray:
     _str = "ORIGIN " + self.origin.__repr__()
     _str += "\n" + "TERMIN " + self.termin.__repr__()
     return _str
+
+cdef class Rays:
+
+  def __init__(self, list rays):
+    self.rays = rays
+    self.nRay = len(self.rays)
+
+  cpdef solveRTE(double[:], kappa, double[:], emiss, double[:] ds):
+    cdef Py_ssize_t i
+    for i in prange(self.nRay, nogil=True):
+      solveRTE(kappa, emiss, ds)
+
+
+
 
 cdef class LightRay(Ray):
 

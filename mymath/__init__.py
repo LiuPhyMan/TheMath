@@ -1,7 +1,6 @@
 from math import floor, pi
-import numpy as np
-from itertools import accumulate
 
+import numpy as np
 from scipy.integrate import cumtrapz
 
 from ._ray import Ray as Ray_c
@@ -51,12 +50,15 @@ class polarGrid(object):
     #                 cmap='viridis')
 
 
-
 def nonuniform_grid_from_data(nGrid, x_data, y_data):
   cumsum = cumtrapz(np.abs(np.gradient(y_data, x_data, edge_order=2)),
                     initial=0)
-  if cumsum[-1] == 0:
+  if cumsum[-1]==0:
     return np.linspace(x_data[0], x_data[-1], num=nGrid)
   else:
     cumsum /= cumsum[-1]
     return np.interp(np.linspace(0, 1, nGrid), cumsum, x_data)
+
+
+from ._CI_coeffs import ls_index, M_coeff_1, M_coeff_2, N_coeff_1, N_coeff_2, \
+  integrate_by_DCT
