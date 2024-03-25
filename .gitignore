@@ -6,6 +6,7 @@
 # Compiled file #
 ###################
 *.so
+mymath/*.so
 
 # Packages #
 ############

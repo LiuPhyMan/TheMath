@@ -68,7 +68,8 @@ def multiRaysRotate(multi_rays: MultiRays, byAxis: str, angle: float) -> MultiRa
                      end_points=pointArraysRotate(multi_rays.endPoints, byAxis, angle))
 
 
-def voigt(dx, *, fwhm_G, fwhm_L):
+def voigt(*, wvl, wvl0, fwhm_G, fwhm_L):
+    dx = wvl - wvl0
     sigma = fwhm_G/sqrt(2*log(2))/2
     gamma = fwhm_L/2
     if (sigma/gamma) < 1e-6:

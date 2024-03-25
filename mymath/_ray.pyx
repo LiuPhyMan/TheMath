@@ -36,10 +36,10 @@ cdef class Rays:
     self.rays = rays
     self.nRay = len(self.rays)
 
-  cpdef solveRTE(double[:], kappa, double[:], emiss, double[:] ds):
-    cdef Py_ssize_t i
-    for i in prange(self.nRay, nogil=True):
-      solveRTE(kappa, emiss, ds)
+#   cpdef solveRTE(double[:] kappa, double[:] emiss, double[:] ds):
+#     cdef Py_ssize_t i
+#     for i in prange(self.nRay, nogil=True):
+#       solveRTE(kappa, emiss, ds) .  #TODO
 
 
 

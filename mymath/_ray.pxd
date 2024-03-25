@@ -16,3 +16,5 @@ cdef class LightRay(Ray):
   cdef public double Iend
   cdef public double thinIend
   cdef public double optThick
+
+
